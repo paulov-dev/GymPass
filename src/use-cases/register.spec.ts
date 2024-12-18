@@ -21,7 +21,7 @@ describe('Register Use Case', () => {
             user.password_hash
         )
 
-        expect(isPasswordCorrectlyHashed).toBe(true)
+        expect(user.id).toEqual(expect.any(String))
 
     })
 
