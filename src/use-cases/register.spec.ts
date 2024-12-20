@@ -5,17 +5,17 @@ import { compare } from 'bcryptjs'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 let usersRepository: InMemoryUsersRepository
-let registerUseCase: RegisterUseCase
+let sut: RegisterUseCase
 
 describe('Register Use Case', () => {
     beforeEach(() => {
         usersRepository = new InMemoryUsersRepository()
-        registerUseCase = new RegisterUseCase(usersRepository)  
+        sut = new RegisterUseCase(usersRepository)  
     })
 
     it('should be able to register', async () => {    
 
-        const { user } = await registerUseCase.execute({
+        const { user } = await sut.execute({
             name: 'Paulo Victor',
             email: 'paulo@example.com',
             password: '123456'
@@ -34,14 +34,14 @@ describe('Register Use Case', () => {
 
         const email = 'paulo@example.com'
 
-        await registerUseCase.execute({
+        await sut.execute({
             name: 'Paulo Victor',
             email: email,
             password: '123456'
         })
 
         await expect(() => 
-            registerUseCase.execute({
+            sut.execute({
                 name: 'Paulo Victor',
                 email: email,
                 password: '123456'

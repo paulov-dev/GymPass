@@ -5,12 +5,12 @@ import { hash } from 'bcryptjs'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
 let usersRepository: InMemoryUsersRepository
-let authenticateUseCase: AuthenticateUseCase  
+let sut: AuthenticateUseCase  
 
 describe('Authenticate Use Case', () => {
     beforeEach(() => {
         usersRepository = new InMemoryUsersRepository()
-        authenticateUseCase = new AuthenticateUseCase(usersRepository)
+        sut = new AuthenticateUseCase(usersRepository)
     })
     it('should be able to authenticate', async () => {          
         
@@ -20,7 +20,7 @@ describe('Authenticate Use Case', () => {
             password_hash: await hash('123456', 6)
         })
 
-        const { user } = await authenticateUseCase.execute({
+        const { user } = await sut.execute({
             email: 'paulovmmf@gmail.com',
             password: '123456'
         })
@@ -31,7 +31,7 @@ describe('Authenticate Use Case', () => {
 
     it('should not be able to authenticate with wrong email', async () => {
 
-        expect(() => authenticateUseCase.execute({
+        expect(() => sut.execute({
             email: 'paulovmmf@gmail.com',
             password: '123465'
         })).rejects.toBeInstanceOf(InvalidCredentialsError)
@@ -39,7 +39,7 @@ describe('Authenticate Use Case', () => {
 
     it('should not be able to authenticate with wrong password', async () => {
         
-        expect(() => authenticateUseCase.execute({
+        expect(() => sut.execute({
             email: 'paulovmmf@gmail.com',
             password: '123123'
         })).rejects.toBeInstanceOf(InvalidCredentialsError)
